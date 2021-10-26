@@ -5,12 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
-
-import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -18,7 +13,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private boolean isPlayerOnesTurn = true;
     private boolean isPlayerTwosTurn = false;
 
-    TextView turnText;
+    public TextView turnText;
 
     private Button[][] gameButtons = new Button[3][3];
     private int turnCount;
@@ -51,6 +46,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 turnCount = 0;
             }
         });
+
+        turnText = findViewById(R.id.turnText);
     }
     /**
      * Called when a view has been clicked.
@@ -65,10 +62,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         if (isPlayerOnesTurn) {
+            turnText.setText("Player 1's turn");
             ((Button)v).setText("X");
             switchTurns();
         }
         else {
+            turnText.setText("Player 2's turn");
             ((Button)v).setText("O");
             switchTurns();
         }
@@ -80,11 +79,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (isPlayerOnesTurn == true) {
             isPlayerOnesTurn = false;
             isPlayerTwosTurn = true;
+            turnText.setText("Player 2's turn");
         }
 
         else if (isPlayerTwosTurn == true) {
             isPlayerTwosTurn = false;
             isPlayerOnesTurn = true;
+            turnText.setText("Player 1's turn");
         }
     }
 
@@ -94,5 +95,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 gameButtons[i][j].setText("");
             }
         }
+        turnText.setText("Player 1's turn");
     }
 }
