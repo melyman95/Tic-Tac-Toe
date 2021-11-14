@@ -3,17 +3,24 @@ package com.example.tic_tac_toe;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     boolean clicked = false;
     private boolean isPlayerOnesTurn = true;
     private boolean isPlayerTwosTurn = false;
+    public int player1TotalScore;
+    public int player2TotalScore;
 
     public TextView turnText;
+    public EditText P1Score;
+    public EditText P2Score;
 
     private Button[][] gameButtons = new Button[3][3];
     private int turnCount;
@@ -48,7 +55,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         turnText = findViewById(R.id.turnText);
+        P1Score = findViewById(R.id.player1score);
+        P2Score = findViewById(R.id.player2score);
     }
+
     /**
      * Called when a view has been clicked.
      *
@@ -57,18 +67,77 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View v) {
 
-        if (!((Button)v).getText().toString().equals("")) {
+        if (!((Button) v).getText().toString().equals("")) {
             return;
         }
 
         if (isPlayerOnesTurn) {
             turnText.setText("Player 1's turn");
-            ((Button)v).setText("X");
+            ((Button) v).setText("X");
+            if (noOpenSquares() == true) {
+                disableButtons();
+                Toast tieMessage = Toast.makeText(getApplicationContext(),
+                        "It's a tie!", Toast.LENGTH_SHORT);
+                tieMessage.show();
+            }
+            if (checkWinner() == true) {
+                if (isPlayerOnesTurn) {
+                    String text = "Player One wins!";
+                    disableButtons();
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast winMessage = Toast.makeText(getApplicationContext(), text, duration);
+                    winMessage.setGravity(Gravity.CENTER, 0, 0);
+                    winMessage.show();
+                    player1TotalScore++;
+                    P1Score.setText(Integer.toString(player1TotalScore));
+                    return;
+                }
+                if (isPlayerTwosTurn) {
+                    String text = "Player Two wins!";
+                    disableButtons();
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast winMessage = Toast.makeText(getApplicationContext(), text, duration);
+                    winMessage.setGravity(Gravity.CENTER, 0, 0);
+                    winMessage.show();
+                    player2TotalScore++;
+                    P2Score.setText(Integer.toString(player2TotalScore));
+                    return;
+                }
+            }
             switchTurns();
-        }
-        else {
+        } else {
             turnText.setText("Player 2's turn");
-            ((Button)v).setText("O");
+            ((Button) v).setText("O");
+            if (noOpenSquares() == true) {
+                disableButtons();
+                Toast tieMessage = Toast.makeText(getApplicationContext(),
+                        "It's a tie!", Toast.LENGTH_SHORT);
+                tieMessage.show();
+            }
+            if (checkWinner() == true) {
+                if (isPlayerOnesTurn) {
+                    String text = "Player One wins!";
+                    disableButtons();
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast winMessage = Toast.makeText(getApplicationContext(), text, duration);
+                    winMessage.setGravity(Gravity.CENTER, 0, 0);
+                    winMessage.show();
+                    player1TotalScore++;
+                    P1Score.setText(Integer.toString(player1TotalScore));
+                    return;
+                }
+                if (isPlayerTwosTurn) {
+                    String text = "Player Two wins!";
+                    disableButtons();
+                    int duration = Toast.LENGTH_SHORT;
+                    Toast winMessage = Toast.makeText(getApplicationContext(), text, duration);
+                    winMessage.setGravity(Gravity.CENTER, 0, 0);
+                    winMessage.show();
+                    player2TotalScore++;
+                    P2Score.setText(Integer.toString(player2TotalScore));
+                    return;
+                }
+            }
             switchTurns();
         }
 
@@ -80,9 +149,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             isPlayerOnesTurn = false;
             isPlayerTwosTurn = true;
             turnText.setText("Player 2's turn");
-        }
-
-        else if (isPlayerTwosTurn == true) {
+        } else if (isPlayerTwosTurn == true) {
             isPlayerTwosTurn = false;
             isPlayerOnesTurn = true;
             turnText.setText("Player 1's turn");
@@ -92,9 +159,75 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void resetBoard() {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
+                gameButtons[i][j].setEnabled(true);
                 gameButtons[i][j].setText("");
             }
         }
         turnText.setText("Player 1's turn");
+    }
+
+    private boolean checkWinner() {
+
+        for (int i = 0; i < 3; i++) {
+            if (gameButtons[i][0].getText().equals(gameButtons[i][1].getText())
+                    && gameButtons[i][0].getText().equals(gameButtons[i][2].getText())
+            && !gameButtons[i][0].getText().equals("")) {
+                return true;
+            }
+        }
+
+        for (int i = 0; i < 3; i++) {
+            if (gameButtons[0][i].getText().equals(gameButtons[1][i].getText())
+                    && gameButtons[0][i].getText().equals(gameButtons[2][i].getText())
+                    && !gameButtons[0][i].getText().equals("")) {
+                return true;
+            }
+        }
+
+        for (int i = 0; i < 3; i++) {
+            if (gameButtons[0][0].getText().equals(gameButtons[1][1].getText())
+                    && gameButtons[0][0].getText().equals(gameButtons[2][2].getText())
+                    && !gameButtons[0][0].getText().equals("")) {
+                return true;
+            }
+        }
+
+        for (int i = 0; i < 3; i++) {
+            if (gameButtons[0][2].getText().equals(gameButtons[1][1].getText())
+                    && gameButtons[0][2].getText().equals(gameButtons[2][0].getText())
+                    && !gameButtons[0][2].getText().equals("")) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void disableButtons() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                gameButtons[i][j].setEnabled(false);
+            }
+        }
+    }
+
+    private boolean noOpenSquares() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (!gameButtons[0][0].getText().equals("") &&
+                        !gameButtons[1][1].getText().equals("") &&
+                        !gameButtons[2][2].getText().equals("") &&
+                        !gameButtons[0][1].getText().equals("") &&
+                        !gameButtons[0][2].getText().equals("") &&
+                        !gameButtons[2][0].getText().equals("") &&
+                        !gameButtons[2][1].getText().equals("") &&
+                        !gameButtons[2][2].getText().equals("") &&
+                        !gameButtons[1][0].getText().equals("") &&
+                        !gameButtons[1][2].getText().equals("")){
+
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
