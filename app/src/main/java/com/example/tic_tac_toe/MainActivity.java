@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -13,10 +14,10 @@ import android.widget.Toast;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     boolean clicked = false;
-    private boolean isPlayerOnesTurn = true;
-    private boolean isPlayerTwosTurn = false;
-    public int player1TotalScore;
-    public int player2TotalScore;
+    private static boolean isPlayerOnesTurn = true;
+    private static boolean isPlayerTwosTurn = false;
+    public static int player1TotalScore;
+    public static int player2TotalScore;
 
     public TextView turnText;
     public EditText P1Score;
@@ -24,6 +25,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Button[][] gameButtons = new Button[3][3];
     private int turnCount;
+
+    private static final String player1wins = "Player X wins!";
+    private static final String player2wins = "Player O wins!";
+    private static final String tieText = "It's a tie!";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,28 +81,29 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ((Button) v).setText("X");
             if (noOpenSquares() == true) {
                 disableButtons();
+                View toast_view = LayoutInflater.from(this).inflate(Integer.parseInt(player1wins), null);
                 Toast tieMessage = Toast.makeText(getApplicationContext(),
-                        "It's a tie!", Toast.LENGTH_SHORT);
+                        player1wins, Toast.LENGTH_LONG);
                 tieMessage.show();
             }
             if (checkWinner() == true) {
                 if (isPlayerOnesTurn) {
-                    String text = "Player One wins!";
+                    String text = "Player X wins!";
                     disableButtons();
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast winMessage = Toast.makeText(getApplicationContext(), text, duration);
-                    winMessage.setGravity(Gravity.CENTER, 0, 0);
+                    int duration = Toast.LENGTH_LONG;
+                    Toast winMessage = Toast.makeText(this, player1wins, duration);
+                    winMessage.setMargin(30, 30);
                     winMessage.show();
                     player1TotalScore++;
                     P1Score.setText(Integer.toString(player1TotalScore));
                     return;
                 }
                 if (isPlayerTwosTurn) {
-                    String text = "Player Two wins!";
+                    String text = "Player O wins!";
                     disableButtons();
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast winMessage = Toast.makeText(getApplicationContext(), text, duration);
-                    winMessage.setGravity(Gravity.CENTER, 0, 0);
+                    int duration = Toast.LENGTH_LONG;
+                    Toast winMessage = Toast.makeText(this, player2wins, duration);
+                    winMessage.setGravity(Gravity.CENTER, 0, 50);
                     winMessage.show();
                     player2TotalScore++;
                     P2Score.setText(Integer.toString(player2TotalScore));
@@ -110,28 +116,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             ((Button) v).setText("O");
             if (noOpenSquares() == true) {
                 disableButtons();
-                Toast tieMessage = Toast.makeText(getApplicationContext(),
-                        "It's a tie!", Toast.LENGTH_SHORT);
+                Toast tieMessage = Toast.makeText(this,
+                        tieText, Toast.LENGTH_SHORT);
                 tieMessage.show();
             }
             if (checkWinner() == true) {
                 if (isPlayerOnesTurn) {
-                    String text = "Player One wins!";
+                    String text = "Player X wins!";
                     disableButtons();
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast winMessage = Toast.makeText(getApplicationContext(), text, duration);
-                    winMessage.setGravity(Gravity.CENTER, 0, 0);
+                    int duration = Toast.LENGTH_LONG;
+                    Toast winMessage = Toast.makeText(this, player1wins, duration);
+                    winMessage.setGravity(Gravity.CENTER, 0, 50);
                     winMessage.show();
                     player1TotalScore++;
                     P1Score.setText(Integer.toString(player1TotalScore));
                     return;
                 }
                 if (isPlayerTwosTurn) {
-                    String text = "Player Two wins!";
+                    String text = "Player O wins!";
                     disableButtons();
-                    int duration = Toast.LENGTH_SHORT;
-                    Toast winMessage = Toast.makeText(getApplicationContext(), text, duration);
-                    winMessage.setGravity(Gravity.CENTER, 0, 0);
+                    int duration = Toast.LENGTH_LONG;
+                    Toast winMessage = Toast.makeText(this, player2wins, duration);
+                    winMessage.setGravity(Gravity.CENTER, 0, 50);
                     winMessage.show();
                     player2TotalScore++;
                     P2Score.setText(Integer.toString(player2TotalScore));
